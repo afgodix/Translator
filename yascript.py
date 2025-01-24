@@ -7,7 +7,7 @@ cursor.execute('''
     CREATE TABLE IF NOT EXISTS Users (
     id INTEGER PRIMARY KEY,
     username TEXT NOT NULL,
-    lastSelectedLanguage VARCHAR(3) NOT NULL,
+    lastSelectedLanguage VARCHAR(2) NOT NULL,
     UNIQUE(id)
     )
     '''
