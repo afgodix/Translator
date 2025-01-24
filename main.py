@@ -1,4 +1,4 @@
-import telebot, deeptranslate as tran
+import telebot, deeptranslate as tran, database
 
 token = input('insert token: ')
 print('starting...')
@@ -10,6 +10,7 @@ print('the bot has started!')
 @bot.message_handler(commands=['start'])
 def start_command(message):
     bot.send_message(message.from_user.id, 'Привет! 👋 Я - TranBot. Я способен переводить текст с русского языка на английский или испанский и наоборот. Для начала работы введите фразу для перевода. Укажите целевой язык (en или es), например: "en: Привет" или "es: Hola".')
+    database.add_new_user(message.from_user.id, message.from_user.username)
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
@@ -31,6 +32,6 @@ def get_text_messages(message):
         bot.edit_message_text(translated_text, message.from_user.id, message.id + 1)
         print(f'Ru{target_language.upper()} - {text_to_translate} -- {translated_text}')
     except Exception as e:
-        bot.send_message(message.from_user.id, 'Произошла ошибка при переводе. Попробуйте еще раз.')
+        bot.send_message(message.from_user.id, 'Произошла ошибка при переводе. Попробуйте еще раз. Ошибка: ', e)
 
 bot.infinity_polling(none_stop=True, interval=0)
