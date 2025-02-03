@@ -68,4 +68,29 @@ def get_text_messages(message):
         print(f'Error translating text: {str(e)}')
 
 
+@bot.inline_handler(func = lambda query: True)
+def inline_requests_handler(inline_query):
+    try:
+        query = inline_query.query
+
+        if not query:
+            return
+
+        languages = ['en', 'es']
+
+        results = []
+        for lang in languages:
+            translated_text = tran.translateEn(query) if lang == 'en' else tran.translateEs(query)
+            results.append(
+                telebot.types.InlineQueryResultArticle(
+                    id = lang,
+                    title = f'Translate to {lang}',
+                    input_message_content = telebot.types.InputTextMessageContent(translated_text)
+                )
+            )
+
+        bot.answer_inline_query(inline_query.id, results)
+    except Exception as e:
+        print(f'Произошла ошибка при inline-переводе, {e}')
+
 bot.infinity_polling(none_stop=True, interval=0)  #цикличная работа бота
